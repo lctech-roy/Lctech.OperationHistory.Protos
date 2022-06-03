@@ -1,0 +1,41 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <LangVersion>latest</LangVersion>
+    <VersionMajor>1</VersionMajor>
+    <VersionMinor>0</VersionMinor>
+    <VersionPatch>2</VersionPatch>
+    <VersionPrefix>$(VersionMajor).$(VersionMinor).$(VersionPatch)</VersionPrefix>
+    <VersionSuffix>$(VersionSuffix)</VersionSuffix>
+    <FileVersion>$(VersionMajor).$([System.DateTime]::UtcNow.ToString(yy)).$([System.DateTime]::UtcNow.ToString(MMdd)).$([System.DateTime]::UtcNow.ToString(HHmm))</FileVersion>
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Authors>Team Zero</Authors>
+    <PackageProjectUrl>https://github.com/lctech-tw/Lctech.OperationHistory.Protos</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/lctech-tw/Lctech.OperationHistory.Protos.git</RepositoryUrl>
+    <Description />
+    <RootNamespace>Lctech.OperationHistory.Protos</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Google.Protobuf" Version="3.20" />
+    <PackageReference Include="Grpc.Core" Version="2.46" />
+    <PackageReference Include="Grpc.Tools" Version="2.46" />
+    <PackageReference Include="Netcorext.Contracts.Protobufs" Version="1.0.0-dev.*" GeneratePathProperty="true" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Protobuf OutputDir="$(Protobuf_OutputPath)" GrpcServices="Both" ProtoRoot="Protos" Include="Protos/*.proto" />
+  </ItemGroup>
+
+  <Target Name="CopyProtos" AfterTargets="Restore;ResolveReferences">
+    <ItemGroup>
+      <Netcorext_Contracts_Protobufs Include="$(PkgNetcorext_Contracts_Protobufs)/**/*.proto" />
+    </ItemGroup>
+    <Copy SourceFiles="@(Netcorext_Contracts_Protobufs)" DestinationFolder="$(ProjectDir)/Protos/Netcorext.Contracts.Protobufs/Result" Condition="Exists('%(RootDir)%(Directory)%(Filename)%(Extension)')" />
+  </Target>
+
+</Project>
