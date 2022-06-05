@@ -1,0 +1,13 @@
+syntax = "proto3";
+package netcorext.contracts.protobufs;
+option csharp_namespace = "Netcorext.Contracts.Protobufs";
+
+import "google/protobuf/any.proto";
+import "Netcorext.Contracts.Protobufs/Result/paging.proto";
+
+message Result {
+  string code = 1;
+  string message = 2;
+  google.protobuf.Any content = 3;
+  netcorext.contracts.protobufs.Paging paging = 4;
+}

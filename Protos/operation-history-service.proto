@@ -1,0 +1,54 @@
+syntax = "proto3";
+package lctech.operationhistory;
+option csharp_namespace = "Lctech.OperationHistory.Protobufs";
+
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/wrappers.proto";
+import "Netcorext.Contracts.Protobufs/Result/paging.proto";
+
+service OperationHistoryService {
+  rpc QueryOperationHistories (QueryOperationHistoriesRequest) returns (QueryOperationHistoriesRequest.Result);
+  rpc CreateOperationHistory (CreateOperationHistoryRequest) returns (CreateOperationHistoryRequest.Result);
+}
+
+message QueryOperationHistoriesRequest {
+  google.protobuf.StringValue type = 1;
+  google.protobuf.Int64Value creatorId = 2;
+  google.protobuf.Int64Value modifierId = 3;
+  google.protobuf.Timestamp startDate = 4;
+  google.protobuf.Timestamp endDate = 5;
+  map<string, string> extendData = 6;
+  netcorext.contracts.protobufs.Paging paging = 7;
+
+  message Result {
+    string code = 1;
+    string message = 2;
+    netcorext.contracts.protobufs.Paging paging = 3;
+    repeated OperationHistory content = 4;
+
+    message OperationHistory {
+      int64 id = 1;
+      google.protobuf.StringValue type = 2;
+      google.protobuf.StringValue reason = 3;
+      google.protobuf.StringValue remark = 4;
+      int64 creatorId = 5;
+      int64 modifierId = 6;
+      google.protobuf.Timestamp creationDate = 7;
+      google.protobuf.Timestamp modificationDate = 8;
+      map<string, string> extendData = 9;
+    }
+  }
+}
+
+message CreateOperationHistoryRequest {
+  string type = 1;
+  google.protobuf.StringValue reason = 2;
+  google.protobuf.StringValue remark = 3;
+  map<string, string> extendData = 4;
+
+  message Result {
+    string code = 1;
+    string message = 2;
+    google.protobuf.Int64Value content = 3;
+  }
+}
